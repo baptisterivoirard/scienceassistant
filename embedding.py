@@ -7,12 +7,14 @@ import faiss
 abstracts = [
     "Breast cancers with HER2 amplification have a higher risk of CNS metastasis.",
     "TLR4 is a key receptor in innate immune response against LPS.",
-    "Xylocaine is a local anesthetic drug widely used in surgery."
+    "Xylocaine is a local anesthetic drug widely used in surgery.", 
+    "The recptor Telt2 is important for the immune response to bacterial infections.",
+    "PY45-R is a phosphate interacting protein of the membrane involve in signaling viral infections."
 ]
 
 question = "What receptors are involved in immune response to LPS?"
 
-def embedding (chunks, question):
+def embedding (chunks, question,nb_chunks):
     model = AutoModel.from_pretrained("dmis-lab/biobert-base-cased-v1.1", torch_dtype="auto")
     tokenizer = AutoTokenizer.from_pretrained("dmis-lab/biobert-base-cased-v1.1")
     
@@ -38,9 +40,9 @@ def embedding (chunks, question):
     question_embedding = question_embedding.reshape(1, -1)
     faiss.normalize_L2(question_embedding)
 
-    distances , indices =index.search(question_embedding, k=1)
-    return indices, distances
+    distances , indices =index.search(question_embedding, k=nb_chunks)
+    return indices, distances ## il faut ensuite aller recup les chunks correspondants et mettre en argument le nb de chunks à prendre dans la fonction puis 
 
 
 if __name__== "__main__":
-    print(embedding(abstracts, question))
+    print(embedding(abstracts, question,3))
