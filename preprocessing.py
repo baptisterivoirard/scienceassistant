@@ -12,4 +12,5 @@ def preprocessing (text):
     text = re.sub(r"©.*$", '', text)
     return text
 
-print (preprocessing('this is a test http://exemple.com and doi:1000000 and [1]'))
+if __name__ == "__main__":
+    print (preprocessing('this is a test http://exemple.com and doi:1000000 and [1]'))
