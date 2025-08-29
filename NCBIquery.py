@@ -15,6 +15,7 @@ def search_abstract (query, nb_abstract):
     response = requests.get(url, params=params)
     data = response.json()
     pmids =data['esearchresult']['idlist']
+    print(pmids)
     return pmids
 
 
@@ -32,10 +33,14 @@ def retrieve_abstracts(pmids):
     root = ET.fromstring(response.text)
     abstracts = ""
     for article in root.findall('.//PubmedArticle'):
-        abstracts += article.find('.//AbstractText')
+        abstract = article.find('.//AbstractText')
+        if abstract is not None:
+            abstracts += abstract.text
+        # print(abstracts)
         # print("Résumé :", abstract.text if abstract is not None else "N/A")
+    return abstracts
 
 
 if __name__=="__main__":
-    pmids = search_abstract('"bacterial OR viral" AND "lung OR respiratory" AND ("infection OR disease") AND ("receptor OR protein")',5)
+    pmids = search_abstract("bacterial OR viral",10)
     print(retrieve_abstracts(pmids))
