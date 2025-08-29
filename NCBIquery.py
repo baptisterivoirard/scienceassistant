@@ -3,47 +3,39 @@ import xml.etree.ElementTree as ET
 import xml.dom.minidom
 
 
-
-url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
-params = {
-        "db": "pubmed",
-        "term": "chronic stress AND neuroinflammation",
-        "retmax": 5,
-        "retmode": "json",
-        "sort" : "relevance"
-    }
-response = requests.get(url, params=params)
-data = response.json()
-pmids =data['esearchresult']['idlist']
-print(pmids)
-
-
-url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
-params = {
-        "db": "pubmed",
-        "id": pmids,
-        "retmode": "xml",
-        "rettype": "abstract"
-        
-    }
-response = requests.get(url, params=params)
+def search_abstract (query, nb_abstract):
+    url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
+    params = {
+            "db": "pubmed",
+            "term": query,
+            "retmax": nb_abstract,
+            "retmode": "json",
+            "sort" : "relevance"
+        }
+    response = requests.get(url, params=params)
+    data = response.json()
+    pmids =data['esearchresult']['idlist']
+    return pmids
 
 
+def retrieve_abstracts(pmids):
+    url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
+    params = {
+            "db": "pubmed",
+            "id": pmids,
+            "retmode": "xml",
+            "rettype": "abstract"
+            
+        }
+    response = requests.get(url, params=params)
 
-# dom = xml.dom.minidom.parseString(response.text)
-# print(dom.toprettyxml())
-
-root = ET.fromstring(response.text)
-
-
-for article in root.findall('.//PubmedArticle'):
-    title = article.find('.//ArticleTitle')
-    print("Titre :", title.text if title is not None else "N/A")
-
-    abstract = article.find('.//AbstractText')
-    print("Résumé :", abstract.text if abstract is not None else "N/A")
-
-    print("---")
+    root = ET.fromstring(response.text)
+    abstracts = ""
+    for article in root.findall('.//PubmedArticle'):
+        abstracts += article.find('.//AbstractText')
+        # print("Résumé :", abstract.text if abstract is not None else "N/A")
 
 
-## Il faut encore fonctionnaliser le script pour prendre en entrée un question 
+if __name__=="__main__":
+    pmids = search_abstract('"bacterial OR viral" AND "lung OR respiratory" AND ("infection OR disease") AND ("receptor OR protein")',5)
+    print(retrieve_abstracts(pmids))
