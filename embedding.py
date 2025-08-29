@@ -41,7 +41,7 @@ def embedding (chunks, question,nb_chunks):
     faiss.normalize_L2(question_embedding)
 
     distances , indices =index.search(question_embedding, k=nb_chunks)
-    return indices, distances ## il faut ensuite aller recup les chunks correspondants et mettre en argument le nb de chunks à prendre dans la fonction puis 
+    return indices ## il faut ensuite aller recup les chunks correspondants et mettre en argument le nb de chunks à prendre dans la fonction puis 
 
 
 if __name__== "__main__":
