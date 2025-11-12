@@ -16,7 +16,7 @@ def main():
     abstracts = retrieve_abstracts(pmids)
     processed_abstracts = preprocessing(abstracts)
     chunks = chunker(processed_abstracts, 500, 50)
-    indices = embedding(chunks, question, 3)
+    indices = embedding(chunks, question, 2)
     important_chunks = []
     for k in indices[0]:
         print (chunks[k])
