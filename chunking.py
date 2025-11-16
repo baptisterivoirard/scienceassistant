@@ -1,4 +1,4 @@
-
+## fonction de découpage en chunk pour l'embedding
 def chunker(text, chunk_size, overlap):
     chunks =[]
     words = text.split()
