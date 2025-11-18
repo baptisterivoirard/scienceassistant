@@ -37,10 +37,20 @@ Ce script ne contient qu'une fonction qui permet de netoyer le texte des abstrac
 
 ## Chunking.py 
 
-Ce script ne contient qu'une fonction qui permet de découper le texte des abstracts en petit chunk de 500 mots avec un overlap de 50 mots (pour ne pas avoir de phrases coupées) pour chaque pour le préparer à l'embeding 
+Ce script ne contient qu'une fonction qui permet de découper le texte des abstracts en petit chunk de 500 mots avec un overlap de 50 mots (pour ne pas avoir de phrases coupées) pour chaque chunk pour les préparer à l'embedding.
+
+## Embedding.py
+
+Ce script ne contient qu'une fonction qui fais à elle seule deux étapes : 
+Elle prend les chunks puis les tokenize et les fait passer dans le modèle afin d'obtenir l'embedding de ces chunks puis ensuite fait de même pour la question scientifique posée par l'utilisateur.
+Ensuite les embedding vectors sont ajoutés dans un index FAISS ou ils pourront être comparé par cosine similarity avec l'embedding vector de la question pour choisir les chunks les plus informatif pour le RAG. J'ai choisis BioBERT pour le modèle et le tokenizer car il s'agit de le meilleure option disponible pour travailler sur des articles scientifique du domaine biomédicale et de santé. 
+
+## Main.py 
+
+Ce script et le script principal celui qui organise la logique et utilise les fonctions des autres. C'est également à partir de lui que le RAG en lui-même et construit et que les appèles aux deux modèles customisés sont réalisé. Il retourne la réponse du deuxième modèle customisé. 
 
 ## Notes 
 
-lenteur du code, le but était juste d'apprendre à utiliser les technologies donc le code n'est pas otpimisé pour tourner vite 
+Le code est assez long à tourner car il fait appel à plusieurs modèle cependant le but personel était juste d'apprendre à utiliser les technologies c'est pourquoi je n'ai pas vraiment otpimisé pour tourner vite, ce sera à faire plus tard. 
 
 ## Exemple de fonctionnement 
